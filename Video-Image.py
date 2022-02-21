@@ -1,7 +1,7 @@
 import cv2
 
-infile = "C:\\Users\\jojop\\Desktop\\Oliver Tree - Cowboys Don't Cry [Music Video] (1).mp4"
-in1 = "C:\\Users\\jojop\\Desktop\\INPUT"
+infile = FILE PATH TO YOUR VIDEO
+in1 = INPUT FILE PATH
 
 vidcap = cv2.VideoCapture(infile)
 success,image = vidcap.read()
