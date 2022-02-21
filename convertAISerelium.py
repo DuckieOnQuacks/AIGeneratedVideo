@@ -10,10 +10,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+in1 = IN FILE PATH
+out = OUT FILE PATH
 
 if __name__ == '__main__':
     fileList = []
-    for root, dirs, files in os.walk(os.path.abspath("C:\\Users\\jojop\\Desktop\\AI Convert\\IN\\")):
+    for root, dirs, files in os.walk(os.path.abspath(in1)):
         for file in files:
             fileList.append(os.path.join(root, file)) #Appends all of the files into the fileList list.
     fileList.sort(key = lambda x: os.path.getmtime(x)) #Sorts the fileList based on the time it was added to the new folder.
@@ -24,20 +26,20 @@ def browser_init(aiImageName):
     d = DesiredCapabilities.CHROME
     d['goog:loggingPrefs'] = { 'browser':'ALL' }
     chromeOptions = webdriver.ChromeOptions()
-    prefs = {"download.default_directory" : f'C:\\Users\\jojop\\Desktop\\AI Convert\\OUT\\'}
+    prefs = {"download.default_directory" : f'{out}}
     chromeOptions.add_experimental_option("prefs",prefs)
     chromeOptions.add_argument("--headless")
-    chromedriver = "C:\\Users\\jojop\\Desktop\\AI Convert\\chromedriver.exe"
+    chromedriver = #PATH TO CHROME DRIVER
     driver = webdriver.Chrome(executable_path=chromedriver, chrome_options=chromeOptions,desired_capabilities=d)
     driver.get("http://gaugan.org/gaugan2/")
     driver.refresh()
     driver.find_element_by_xpath("//*[@id='myCheck']").click()
-    os.chdir("C:\\Users\\jojop\\Desktop\\AI Convert\\OUT\\")
+    os.chdir(out)
 
 ###########################################################################################################
 def convert_AI(aiPic, aiImageName):
     element2 = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "segmapfile")))
-    element2.send_keys(f'C:\\Users\\jojop\\Desktop\\AI Convert\\IN\\{aiImageName}.png')
+    element2.send_keys(f'in1{aiImageName}.png')
     element2 = driver.find_element_by_xpath("//*[@id='btnSegmapLoad']")
     element2.send_keys(Keys.ENTER)
 
