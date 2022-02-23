@@ -8,8 +8,10 @@ from convertAI import convert
 from tkinter import *
 
 
-in1 = IN PATH
-out = OUT PATH
+in1 = "C:\\Users\\jojop\\Desktop\\AI Convert\\INPUT"
+out = "C:\\Users\\jojop\\Desktop\\AI Convert\\OUTPUT"
+in2 = "C:\\Users\\jojop\\Desktop\\AI Convert\\IN\\"
+out2 = "C:\\Users\\jojop\\Desktop\\AI Convert\\OUT\\"
 
 fileList = []
 
