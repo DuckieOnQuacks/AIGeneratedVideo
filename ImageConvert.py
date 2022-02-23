@@ -1,12 +1,5 @@
 import os
-import asyncio
-from datetime import datetime
-from distutils.command.upload import upload
-from tkinter.ttk import Style
 from PIL  import Image
-from convertAI import convert
-from tkinter import *
-
 
 in1 = "C:\\Users\\jojop\\Desktop\\AI Convert\\INPUT"
 out = "C:\\Users\\jojop\\Desktop\\AI Convert\\OUTPUT"
@@ -14,7 +7,6 @@ in2 = "C:\\Users\\jojop\\Desktop\\AI Convert\\IN\\"
 out2 = "C:\\Users\\jojop\\Desktop\\AI Convert\\OUT\\"
 
 fileList = []
-
 #Loops through 
 for root, dirs, files in os.walk(os.path.abspath(in1)):
     for file in files:
@@ -40,11 +32,8 @@ def nearest(a,b2,c):
         x = a - r
         y = b2 - g
         z = c - b
-        scalar = (((x**2) + (y**2) + (z**2)) **.5)  #FIX THIS
+        scalar = (((x**2) + (y**2) + (z**2)) **.5)
         scalarList.append((scalar, i))
-    # scalarList = set(scalarList)
-    # nearest = sorted(scalarList)[0]
-    # firstNearestColor = colors[nearest[1]]                                                REFACTORING
     nearest = sorted(set(scalarList))[0]
     firstNearestColor = colors[nearest[1]]
     return firstNearestColor
@@ -53,7 +42,6 @@ def nearest(a,b2,c):
 def convert_image(pic, imagename):
     im = Image.open(pic)
     img = im.load()
-    imdata = []
     [xs,ys] = im.size  
     for x in range(0, xs):
         for y in range(0, ys):
@@ -63,7 +51,6 @@ def convert_image(pic, imagename):
                 [r,g,b] = img[x,y]
             [i,j,k] = nearest(r,g,b) #need to await this somehow... asyncio.run() cannot be called from a running event loop -> error
             value = (i,j,k)
-            imdata.append(value)
             im.putpixel((x, y), value)
     im.save(f'{out}\\{imagename}.png')
 
@@ -71,9 +58,3 @@ def convert_image(pic, imagename):
 for i, file in enumerate(fileList):
         convert_image(file, i)  #you cant await this one it will wait until complete
         print(f'Saved Image {i}')
-
-
-
-'''
-as long as we can add in puts into await nearest()
-'''
