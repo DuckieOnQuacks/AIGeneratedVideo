@@ -2,6 +2,7 @@ import os
 from PIL import Image
 import concurrent.futures
 from more_itertools import grouper
+from VideoImage import frame
 
 
 in1 = "C:\\Users\\jojop\\Desktop\\AI Convert Fast\\GoHArd\\IN"
@@ -10,7 +11,7 @@ out = "C:\\Users\\jojop\\Desktop\\AI Convert Fast\\GoHArd\\OUT"
 fileList = []
 
 #Loops through 
-for root, dirs, files in os.walk(os.path.abspath(in1)):
+for root, dirs, files in os.walk(os.path.abspath(newPath)):
     for file in files:
         fileList.append(os.path.join(root, file)) #Appends all of the files into the fileList list.
 fileList.sort(key = lambda x: os.path.getmtime(x)) #Sorts the fileList based on the time it was added to the new folder.
