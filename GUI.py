@@ -1,73 +1,39 @@
+
+from fileinput import filename
 import tkinter as tk
 from tkinter import *
-from tkinter import filedialog as fd
+from tkinter import filedialog
+import tkinter
 import VideoImage, ImageConvert_HSV_MAPS, ImageVideo, GauganSend
-import os
 
-
-class gui:
+class gui():
     def __init__(self):
+        self.filetypes = (('Video Files', '*.mp4'),('All files', '*.*'))
         self.root = tk.Tk()
         self.root.title('AI Music Video Interpretor')
         self.root.resizable(False, False)
-        self.root.geometry('500x250')
-        
-        #Create Label Object
-        self.labelHow = tk.Label(self.root, text = 'Please Choose The Location Where You Would Like To Store Your Images')
-        self.label = tk.Label(self.root, text = '')
-
-        self.labelWhere = tk.Label(self.root, text = 'Please Choose The Location Of Your Youtube Video')
-        self.label2 = tk.Label(self.root, text = 'C:\\Desktop')
-
-        #Create Button Object
-        self.button = tk.Button(self.root,text = "Choose Directory",command = self.selectFolder)
-        self.button.place(relx = 0.5, rely = 0.5, anchor = CENTER)
-
-        #Create Button Object to choose youtube link location
-        self.button2 = tk.Button(self.root,text = "Choose Video File",command = self.selectVideo)
-        self.button2.place(relx = 0.5, rely = 0.5, anchor = CENTER)
-
-        self.buttonPartial = tk.Button(self.root,text = "Start Partial",command = self.PartialStart)
-        self.buttonPartial.place(relx = 1, rely = 1, anchor = CENTER)
-
-        self.buttonBegin = tk.Button(self.root,text = "Start Conversion",command = self.StartMain)
-        self.buttonBegin.place(relx = 0.5, rely = 0.5, anchor = CENTER)
-
-        #Pack Everything up
-        self.labelHow.pack()
-        self.label.pack(padx = 0, pady = 5)
-        self.button.pack()
-
-        self.labelWhere.pack(padx = 0, pady = 10)
-        self.label2.pack(padx = 0, pady = 5)
-        self.button2.pack()
-
-        self.buttonBegin.pack()
-        self.buttonPartial.pack()
+        self.root.geometry('500x200')
+        self.root.attributes('-alpha',0.8)
+        self.b1 = tk.Button(self.root,text="SELECT FOLDER", command = self.selectFolderPath)
+        self.b1.place(relx = .46, rely = .5, anchor = CENTER)
+        self.b1.pack()
+        self.button_start = tk.Button(self.root,text=" START ENTIRE ", command = self.StartMain)
+        self.file_label = Label(self.root)
+        self.file_label.pack()
+        self.button_start.pack()
+        self.partial_button = tk.Button(self.root,text="START PARTIAL", command = self.PartialStart).pack()
+        self.Progress = Label(self.root)
+        self.Progress.pack()
+        self.console = "WAITING..."
+        self.console_loop()
         self.root.mainloop()
 
-    def fileCheck(self):
-        filelist = ["./AiImages","./Processed","./Frames"]
-        for files in filelist:
-            if os.path.exists(files):
-                #check what files are here
-                pass
-            else:
-                os.makedirs(files)
+    def console_loop(self):
+        output = self.console
+        self.Progress.configure(text=output)
+        self.root.after(2000, self.console_loop)
 
-    #######################
-    def selectFolder(self):
-        folderPath = fd.askdirectory()
-        self.label['text'] = folderPath
-        self.filePath = folderPath
-        os.chdir(self.filePath)
-        self.fileCheck()
 
-    ######################
-    def selectVideo(self):
-        videoPath = fd.askopenfilename(title = "Select A File", filetypes = (('Video Files', '*.mp4'),('All files', '*.*')))
-        self.label2['text'] = videoPath
-        self.videoPathYep = videoPath
 
     # START PARTIAL =====================================================================================================
     def PartialStart(self):
@@ -75,49 +41,56 @@ class gui:
         self.window.title('Run Parts Of Interpretor')
         self.window.resizable(False, False)
         self.window.geometry('250x150')
-        self.VideoImage_button = tk.Button(self.window,text="Convert Video To Image", command = self.videoImage).pack()
-        self.ImageConvert_button = tk.Button(self.window,text="Convert Images", command = self.convertImage).pack()
-        self.GuaganSend_button= tk.Button(self.window,text="Send Images to AI", command = self.gauganSend).pack()
-        self.ImageVideo_button = tk.Button(self.window,text="Convert Image To Video", command = self.imageVideo).pack()
+        self.window.attributes('-alpha',0.8)
+        self.VideoImage_button = tk.Button(self.window,text="Convert Video To Image", command = self.Video_Image).pack()
+        self.ImageConvert_button = tk.Button(self.window,text="Convert Images", command = self.Image_Convert).pack()
+        self.GuaganSend_button= tk.Button(self.window,text="Send Images to AI", command = self.Image_Convert).pack()
+        self.ImageVideo_button = tk.Button(self.window,text="Convert Image To Video", command = self.Image_Video).pack()
         self.partial_window = Label(self.window,text="Select Frame Rate For Image To Video").pack()
         self.frame_variable = IntVar(self.window)
-        print(self.frame_variable)
         self.frame_variable.set(25)
-        print(self.frame_variable)
         self.FrameSelect = OptionMenu(self.window, self.frame_variable, 24, 25,30,50,60)
         self.FrameSelect.pack()
         self.window.mainloop()
 
-    ##################
-    def getPath(self):
-        return self.filePath
-
-    #####################
-    def gauganSend(self):
+    def Video_Image(self):
+        self.console = "VIDEO TO IMAGE: STARTING"
+        if self.folderPath:
+            filename = self.folderPath
+        else:
+            filename = filedialog.askopenfilename(title="Select Video To Process", initialdir='/', filetypes = self.filetypes)
+        VideoImage.convert(filename)
+        self.console = "VIDEO TO IMAGE: COMPLETE"
+    def Image_Convert(self):
+        self.console = "IMAGE CONVERT: STARTING"
+        k = ImageConvert_HSV_MAPS.execute()
+        if k:
+            print("Done....")
+            self.console = "IMAGE CONVERT: COMPLETE"
+    def GuaganSend(self):
         GauganSend.execute()
+    def Image_Video(self):
+        self.console = f"GENERATING VIDEO AT {self.frame_variable} FPS"
+        ImageVideo.generate_video(self.frame_variable)
+        self.console = f"VIDEO GENERATION COMPLETE"
 
-    #######################
-    def convertImage(self):
-        ImageConvert_HSV_MAPS.execute()
+    # START PARTIAL =====================================================================================================
+
+
+
+    def selectFolderPath(self):
+        self.folderPath = str(filedialog.askopenfilename(title="Select Video To Process",initialdir='/',filetypes = self.filetypes))
+        self.file_label.configure(text = self.folderPath)
         
-    def imageVideo(self):
-        ImageVideo.generate_video(self.frame_variable, self.filePath)
+    # START ENTIRE ======================================================================================================
 
-    def videoImage(self):
-        VideoImage.convert(self.filePath, self.videoPathYep)
-
-########################
     def StartMain(self):
         print("Splitting video")
         self.console = "VIDEO TO IMAGE: STARTING"
-        try:
-            VideoImage.convert(self.filePath, self.videoPathYep)
-            self.console = "VIDEO TO IMAGE: COMPLETE"
-            print("complete")
-        except:
-            print("VIDEO TO IMAGE FAILED.... CONTINUING")
-            self.console = "VIDEO TO IMAGE: FAILED"
-        fps = VideoImage.videofps(self.videoPathYep)
+        VideoImage.convert(self.folderPath)
+        self.console = "VIDEO TO IMAGE: COMPLETE"
+        print("complete")
+        fps = VideoImage.videofps(self.folderPath)
         print(f'FPS = {fps}')
         print("Converting Image")
         self.console =f"IMAGE CONVERT: STARTING\nVIDEO FPS: {fps}"
@@ -133,12 +106,14 @@ class gui:
         print("Creating Video")
         self.console = "RECEIVED ALL FILES"
         self.console = f"GENERATING VIDEO AT {fps} FPS"
-        ImageVideo.generate_video(fps, self.filePath)
+        ImageVideo.generate_video(fps)
         self.console = f"VIDEO GENERATION COMPLETE"
         print("complete")
+    # START ENTIRE ======================================================================================================= 
+
 
 if __name__ == "__main__":
-    GUI = gui()        
+    GUI = gui()
 
 
 

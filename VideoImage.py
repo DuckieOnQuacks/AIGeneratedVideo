@@ -1,29 +1,38 @@
+from msilib.schema import IniFile
+from pydub import AudioSegment
 import cv2
+import sys
+import subprocess
 import os
 
-fileList = []
-####################################
-def convert(filePath, videoPathYep):
-  vidcap = cv2.VideoCapture(videoPathYep)
-  success, image = vidcap.read()
+
+def audio(video_file):
+    filename, ext = os.path.splitext(video_file)
+    subprocess.call(["ffmpeg", "-y", "-i", video_file, f"{filename}.mp3"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+def convert(infile):
+  print(infile)
+  #audio(infile)
+  out = ".\images"
+  vidcap = cv2.VideoCapture(infile)
+  #success,image = vidcap.read()
   count = 0
-  newPath = f"{filePath}\\Frames"
-  if not os.path.exists(newPath):
-    os.makedirs(newPath)
-  
+  success = True
   while success:
-    cv2.imwrite(os.path.join(newPath, "%d.jpg") % count, image) # save frame as JPEG file      
-    success , image = vidcap.read()
-    print('Read a new frame: ', success, count)
+    success,image = vidcap.read()
+    try:
+      cv2.imwrite(out+"\\" + "%d.jpg" % count, image)    # save frame as JPEG file
+      print(f"Saved Image {count}")
+    except:
+      print("IMAGE EMPTY")
+    if cv2.waitKey(10) == 27:                     # exit if Escape is hit
+        break
     count += 1
 
-#######################
-def videofps(filepath):
-    cap = cv2.VideoCapture(filepath)
-    framespersecond = int(cap.get(cv2.CAP_PROP_FPS))
-    print("The total number of frames in this video is ", framespersecond)
-    return framespersecond
+def videofps(infile):
+  vidcap = cv2.VideoCapture(infile)
+  fps = vidcap.get(cv2.CAP_PROP_FPS)
+  return fps
 
-  
-
-
+if __name__ == "__main__":
+  convert("test.mp4")
