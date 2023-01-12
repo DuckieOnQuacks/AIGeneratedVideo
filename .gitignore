@@ -26,6 +26,9 @@
 # Visual Studio cache directory
 .vs/
 
+.mp4/
+.mp3/
+
 # Gradle cache directory
 .gradle/
 
