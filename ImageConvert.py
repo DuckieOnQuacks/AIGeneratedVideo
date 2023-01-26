@@ -4,7 +4,6 @@ import concurrent.futures
 import itertools
 from more_itertools import grouper
 import time
-from numba import jit
 
 in1 = ".\images"
 out = ".\in"
@@ -66,10 +65,6 @@ def main(List):
         print(f'CONVERTING: {file}')
         convert_image(file)  
         print(f'Saved Image {file}')
-
-
-
-
 
 def execute():
 	items = get_files()

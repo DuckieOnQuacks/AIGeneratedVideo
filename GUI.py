@@ -1,4 +1,3 @@
-
 from fileinput import filename
 import tkinter as tk
 from tkinter import *
@@ -13,7 +12,7 @@ class gui():
         self.root.title('AI Music Video Interpretor')
         self.root.resizable(False, False)
         self.root.geometry('500x200')
-        self.root.attributes('-alpha',0.8)
+        self.root.attributes('-alpha',1)
         self.b1 = tk.Button(self.root,text="SELECT FOLDER", command = self.selectFolderPath)
         self.b1.place(relx = .46, rely = .5, anchor = CENTER)
         self.b1.pack()
@@ -33,23 +32,21 @@ class gui():
         self.Progress.configure(text=output)
         self.root.after(2000, self.console_loop)
 
-
-
     # START PARTIAL =====================================================================================================
     def PartialStart(self):
         self.window = tk.Toplevel(self.root)
         self.window.title('Run Parts Of Interpretor')
         self.window.resizable(False, False)
         self.window.geometry('250x150')
-        self.window.attributes('-alpha',0.8)
+        self.window.attributes('-alpha', 1)
         self.VideoImage_button = tk.Button(self.window,text="Convert Video To Image", command = self.Video_Image).pack()
         self.ImageConvert_button = tk.Button(self.window,text="Convert Images", command = self.Image_Convert).pack()
-        self.GuaganSend_button= tk.Button(self.window,text="Send Images to AI", command = self.Image_Convert).pack()
+        self.GuaganSend_button= tk.Button(self.window,text="Send Images to AI", command = self.GuaganSend).pack()
         self.ImageVideo_button = tk.Button(self.window,text="Convert Image To Video", command = self.Image_Video).pack()
         self.partial_window = Label(self.window,text="Select Frame Rate For Image To Video").pack()
         self.frame_variable = IntVar(self.window)
-        self.frame_variable.set(25)
-        self.FrameSelect = OptionMenu(self.window, self.frame_variable, 24, 25,30,50,60)
+        self.frame_variable.set(25.0)
+        self.FrameSelect = OptionMenu(self.window, self.frame_variable, 24.0, 25.0, 30.0, 50.0, 60.0)
         self.FrameSelect.pack()
         self.window.mainloop()
 
@@ -70,13 +67,11 @@ class gui():
     def GuaganSend(self):
         GauganSend.execute()
     def Image_Video(self):
-        self.console = f"GENERATING VIDEO AT {self.frame_variable} FPS"
-        ImageVideo.generate_video(self.frame_variable)
+        self.console = f"GENERATING VIDEO AT {self.frame_variable.get()} FPS"
+        ImageVideo.generate_video(self.frame_variable.get())
         self.console = f"VIDEO GENERATION COMPLETE"
 
     # START PARTIAL =====================================================================================================
-
-
 
     def selectFolderPath(self):
         self.folderPath = str(filedialog.askopenfilename(title="Select Video To Process",initialdir='/',filetypes = self.filetypes))

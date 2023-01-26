@@ -1,5 +1,6 @@
 from msilib.schema import IniFile
 from pydub import AudioSegment
+from moviepy.editor import VideoFileClip
 import cv2
 import sys
 import subprocess
@@ -7,12 +8,16 @@ import os
 
 
 def audio(video_file):
-    filename, ext = os.path.splitext(video_file)
-    subprocess.call(["ffmpeg", "-y", "-i", video_file, f"{filename}.mp3"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+  # Open the mp4 file
+  clip = VideoFileClip(video_file)
+  # Extract the audio from the file
+  audio = clip.audio
+  # Save the audio to a new file
+  audio.write_audiofile("audio.mp3")
 
 def convert(infile):
   print(infile)
-  #audio(infile)
+  audio(infile)
   out = ".\images"
   vidcap = cv2.VideoCapture(infile)
   #success,image = vidcap.read()

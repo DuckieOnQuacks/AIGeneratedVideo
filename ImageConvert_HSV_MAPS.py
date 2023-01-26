@@ -81,7 +81,7 @@ def main(List):
 
 def execute():
     items = get_files()
-    executor = concurrent.futures.ProcessPoolExecutor(5)
+    executor = concurrent.futures.ProcessPoolExecutor(10)
     groups = grouper(5, items, fillvalue=None)
     futures = [executor.submit(main, group) for group in groups]
     return concurrent.futures.wait(futures, timeout=None)
