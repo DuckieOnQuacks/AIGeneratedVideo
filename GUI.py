@@ -2,7 +2,6 @@ from fileinput import filename
 import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
-import tkinter
 import VideoImage, ImageConvert_HSV_MAPS, ImageVideo, GauganSend
 
 class gui():
@@ -85,7 +84,7 @@ class gui():
         VideoImage.convert(self.folderPath)
         self.console = "VIDEO TO IMAGE: COMPLETE"
         print("complete")
-        fps = VideoImage.videofps(self.folderPath)
+        fps = VideoImage.videofps(self.folderPath) #Grab video fps from videoImage file
         print(f'FPS = {fps}')
         print("Converting Image")
         self.console =f"IMAGE CONVERT: STARTING\nVIDEO FPS: {fps}"

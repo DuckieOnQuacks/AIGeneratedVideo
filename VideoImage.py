@@ -26,7 +26,7 @@ def convert(infile):
   while success:
     success,image = vidcap.read()
     try:
-      cv2.imwrite(out+"\\" + "%d.jpg" % count, image)    # save frame as JPEG file
+      cv2.imwrite(out + "\\" + "%d.jpg" % count, image)    # save frame as JPEG file
       print(f"Saved Image {count}")
     except:
       print("IMAGE EMPTY")
@@ -37,6 +37,7 @@ def convert(infile):
 def videofps(infile):
   vidcap = cv2.VideoCapture(infile)
   fps = vidcap.get(cv2.CAP_PROP_FPS)
+  vidcap.release()
   return fps
 
 if __name__ == "__main__":

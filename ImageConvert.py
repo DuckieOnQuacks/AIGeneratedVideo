@@ -1,9 +1,7 @@
 import os
 from PIL import Image
 import concurrent.futures
-import itertools
 from more_itertools import grouper
-import time
 
 in1 = ".\images"
 out = ".\in"

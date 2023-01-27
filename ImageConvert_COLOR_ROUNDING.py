@@ -2,8 +2,6 @@ import os
 import concurrent.futures
 import itertools
 from more_itertools import grouper
-import time
-from numba import jit
 import cv2
 
 in1 = ".\images"
@@ -61,10 +59,6 @@ def main(List):
         print(f'CONVERTING: {file}')
         convert_image(file)  
         print(f'Saved Image {file}')
-
-
-
-
 
 def execute():
     items = get_files()

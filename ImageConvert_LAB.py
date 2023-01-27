@@ -1,7 +1,5 @@
 import os
-from PIL import Image
 import concurrent.futures
-import itertools
 from more_itertools import grouper
 
 import cv2
@@ -14,8 +12,6 @@ def get_files():
             fileList.append(os.path.join(root, file)) #Appends all of the files into the fileList list.
     fileList.sort(key = lambda x: os.path.getmtime(x)) #Sorts the fileList based on the time it was added to the new folder.
     return fileList
-
-
 
 
 ###########################################################################################################
@@ -36,18 +32,11 @@ def main(List):
         convert_image(file)  
         print(f'Saved Image {file}')
 
-
-
-
-
 def execute():
 	items = get_files()
 	executor = concurrent.futures.ProcessPoolExecutor(5)
 	futures = [executor.submit(main, group) for group in grouper(5, items)]
 	return concurrent.futures.wait(futures,timeout=None)
-
-
-
 
 if __name__ == "__main__":
     execute()
